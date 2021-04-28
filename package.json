@@ -37,7 +37,8 @@
     "start": "docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d",
     "restart": "docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml restart",
     "stop": "docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml down",
-    "logs": "docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml logs"
+    "logs": "docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml logs",
+    "test": "jest"
   },
   "nodemonConfig": {
     "watch": [
@@ -45,5 +46,9 @@
       "express/",
       "graphql/"
     ]
+  },
+  "devDependencies": {
+    "apollo-server-testing": "^2.23.0",
+    "jest": "24.7.1"
   }
 }
