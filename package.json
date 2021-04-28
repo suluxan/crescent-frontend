@@ -47,6 +47,9 @@
       "graphql/"
     ]
   },
+  "jest": {
+    "testPathIgnorePatterns": [ "/node_modules/", "<rootDir>/react"]
+  },
   "devDependencies": {
     "apollo-server-testing": "^2.23.0",
     "jest": "24.7.1"
