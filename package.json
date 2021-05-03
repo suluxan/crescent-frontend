@@ -48,7 +48,13 @@
     ]
   },
   "jest": {
-    "modulePathIgnorePatterns": [ "/node_modules/", "<rootDir>/react", "<rootDir>/mongodb"]
+    "verbose": true,
+    "modulePathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/react",
+      "<rootDir>/mongodb"
+    ],
+    "testEnvironment": "node"
   },
   "devDependencies": {
     "apollo-server-testing": "^2.23.0",
