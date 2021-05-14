@@ -113,7 +113,14 @@ const resolvers = {
       project.externalUrls = R.append({label, link, type}, existingUrls)
       await project.save()
       return project
-    }
+    },
+
+    updateProjectDescription: async (parent, {projectID, newDescription}, {Projects}) => {
+      const project = await Projects.findOne({projectID})
+      project.description = newDescription
+      await project.save()
+      return project
+    },
   },
   // Subfield resolvers
   Project: {

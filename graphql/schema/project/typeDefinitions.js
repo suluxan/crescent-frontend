@@ -85,6 +85,8 @@ const typeDefs = gql`
       link: String
       type: String
     ): Project
+
+    updateProjectDescription(projectID: ID, newDescription: String): Project
   }
 `
 
