@@ -20,7 +20,7 @@ export default function EditProjectDetailsModal ({project}) {
 
   const sameName = R.equals(oldName, newName)
   const sameDesc = R.equals(oldDescription, newDescription)
-  const disabled = R.or(R.or(loadingDesc, loadingName), R.and(sameName, sameDesc)) // disable button when loading or unchanged description/name
+  const disabled = R.any(RA.isTrue, [loadingDesc, loadingName, R.and(sameName, sameDesc)]) // disable button when loading or unchanged description/name
 
   // calls appropriate mutate function after button is clicked
   const submitButtonHandler = () => {
