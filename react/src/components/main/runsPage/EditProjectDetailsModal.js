@@ -9,16 +9,24 @@ import {useEditProjectDetailsMutation} from '../../../apollo/hooks/project'
 
 export default function EditProjectDetailsModal ({project}) {
   const [open, setOpen] = useState(false) // whether or not Modal is open
-  const {projectID, name: projectName, description: oldDescription} = project // destructuring
-  const {editProjectDescription, loading, data} = useEditProjectDetailsMutation({projectID})
+  const {projectID, name: oldName, description: oldDescription} = project // destructuring
+  const {editProjectDescription, editProjectName, loadingDesc, dataDesc, loadingName, dataName} = useEditProjectDetailsMutation({projectID})
+  // keeping track of what's being typed for description and name
+  const [newDescription, setNewDescription] = useState(oldDescription)
+  const [newName, setNewName] = useState(oldName)
+  
+  useEffect(() => {if (open) {setNewDescription(oldDescription)}}, [open]) // when Modal is first opened, set new description and name as their old ones so it's displayed
+  useEffect(() => {if (R.or(RA.isNotNil(dataDesc), RA.isNotNil(dataName))) {setOpen(false)}}, [dataDesc, dataName]) // close Modal when mutation successful
 
-  const [newDescription, setNewDescription] = useState(oldDescription) // to keep track of what's being typed as the new description
-  useEffect(() => {if (open) {setNewDescription(oldDescription)}}, [open]) // when Modal is first opened, set new description as the old one so it's displayed
+  const sameName = R.equals(oldName, newName)
+  const sameDesc = R.equals(oldDescription, newDescription)
+  const disabled = R.or(R.or(loadingDesc, loadingName), R.and(sameName, sameDesc)) // disable button when loading or unchanged description/name
 
-  useEffect(() => {if (RA.isNotNil(data)) {setOpen(false)}}, [data]) // close Modal when mutation successful
-
-  const disabled = R.or(loading, R.equals(oldDescription, newDescription)) // disable button when loading or unchanged description
-  const submitButtonProps = {disabled, loading, fluid: true, content: 'Edit', onClick: () => editProjectDescription({variables: {newDescription}})} // customizing some button props
+  // calls appropriate mutate function after button is clicked
+  const submitButtonHandler = () => {
+    if (!sameName) {editProjectName({variables: {newName}})}
+    if (!sameDesc) {editProjectDescription({variables: {newDescription}})}
+  }
 
   return (
     <Modal basic open={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}
@@ -31,13 +39,16 @@ export default function EditProjectDetailsModal ({project}) {
     >
       <Modal.Content>
         <Segment attached='top'>
-          <Header icon='edit' content={projectName} subheader='Are you sure you want to edit this project?' />
+          <Header icon='edit' content={oldName} subheader='Edit the details of this project?' />
         </Segment>
         <Segment attached>
+          <Header as='h4'>Project Name</Header>
+          <Input fluid value={newName} onChange={(e, {value}) => {setNewName(value)}}/>
+          <Header as='h4'>Project Description</Header>
           <Input fluid value={newDescription} onChange={(e, {value}) => {setNewDescription(value)}} />
         </Segment>
         <Segment attached='bottom'>
-          <Button {...submitButtonProps} />
+          <Button color='green' disabled={disabled} loading={R.or(loadingDesc, loadingName)} fluid content='Save' onClick={submitButtonHandler}/>
         </Segment>
       </Modal.Content>
 

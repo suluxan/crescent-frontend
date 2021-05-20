@@ -122,6 +122,13 @@ const resolvers = {
       await project.save()
       return project
     },
+
+    updateProjectName: async(parent, {projectID, newName}, {Projects}) => {
+      const project = await Projects.findOne({projectID})
+      project.name = newName
+      await project.save()
+      return project
+    }
   },
   // Subfield resolvers
   Project: {

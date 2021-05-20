@@ -88,6 +88,9 @@ const typeDefs = gql`
 
     # Update the project's description
     updateProjectDescription(projectID: ID, newDescription: String): Project
+
+    # Update the project's name
+    updateProjectName(projectID: ID, newName: String): Project
   }
 `
 
