@@ -116,6 +116,7 @@ const resolvers = {
     },
 
     updateProjectDescription: async (parent, {projectID, newDescription}, {Projects}) => {
+      // finds the project with the corresponding ID, updates the description, save, and return
       const project = await Projects.findOne({projectID})
       project.description = newDescription
       await project.save()
