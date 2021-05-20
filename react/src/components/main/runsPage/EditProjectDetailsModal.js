@@ -48,7 +48,7 @@ export default function EditProjectDetailsModal ({project}) {
           <Input fluid value={newDescription} onChange={(e, {value}) => {setNewDescription(value)}} />
         </Segment>
         <Segment attached='bottom'>
-          <Button color='green' disabled={disabled} loading={R.or(loadingDesc, loadingName)} fluid content='Save' onClick={submitButtonHandler}/>
+          <Button color='black' disabled={disabled} loading={R.or(loadingDesc, loadingName)} fluid content='Save' onClick={submitButtonHandler}/>
         </Segment>
       </Modal.Content>
 
