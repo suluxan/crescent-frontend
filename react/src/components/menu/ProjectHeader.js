@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect } from 'react'
 import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
-import { Button, Input, Form, Modal, Dropdown, Segment, Header, Container, Label } from 'semantic-ui-react'
+import { Button, Input, Form, Modal, Dropdown, Popup, Segment, Message, Header, Label } from 'semantic-ui-react'
 
 import { useCrescentContext } from '../../redux/hooks'
 import { useProjectDetailsQuery } from '../../apollo/hooks/project'
@@ -105,6 +105,7 @@ const ProjectHeader = ({
   const sameOwner = R.equals(createdUserID, state.form.ownerID)
   const disabled = R.or(loading, RA.allEqualTo(true, [sameName, sameDesc, sameOwner])) // disable button when loading or unchanged description/name/owner
   const currentUserIsCreator = R.equals(currentUserID, createdUserID)
+  const notShared = R.equals(1, R.length(state.project.sharedWith))
 
   // call dispatch with appropriate action(s) after Save is clicked
   const submitButtonHandler = () => {
@@ -137,8 +138,21 @@ const ProjectHeader = ({
                   onChange={(e, { value }) => { dispatch({ type: 'updateFormDescription', payload: { newDescription: value } }) }}
                 />
               </Form>
-              <Header as='h4'>Project Owner</Header>
-              <Dropdown placeholder='Select a User' fluid selection onChange={(e, { value }) => { dispatch({ type: 'updateFormOwner', payload: { newOwnerID: value } }) }}
+              <Header as='h4'>
+                <Header.Content>
+                  Project Owner
+                  { notShared && 
+                    <Header.Subheader>This project is not shared with any other users</Header.Subheader>
+                  }
+                </Header.Content>
+              </Header>
+              <Dropdown
+                defaultValue={createdUserID}
+                fluid
+                selection
+                onChange={(e, { value }) => {
+                  dispatch({ type: 'updateFormOwner', payload: { newOwnerID: value } })
+                }}
                 options={
                   R.map(
                     ({ name, userID }) => ({
@@ -148,7 +162,8 @@ const ProjectHeader = ({
                     }),
                     state.project.sharedWith
                   )
-                } />
+                }
+                disabled={notShared} />
             </Segment>
             <Segment attatched='bottom'>
               <Button color='black' disabled={disabled} loading={loading} fluid content='Save' onClick={submitButtonHandler} />

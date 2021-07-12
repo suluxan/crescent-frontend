@@ -6,7 +6,6 @@ import moment from 'moment'
 
 import ArchiveProjectModal from './ArchiveProjectModal'
 import ShareProjectModal from './ShareProjectModal'
-import EditProjectDetailsModal from './EditProjectDetailsModal'
 
 import MergedProjectsDetails from './MergedProjectsDetails'
 import UploadedDatasetsDetails from './UploadedDatasetsDetails'

@@ -50,6 +50,7 @@ const resolvers = {
         const project = await Projects.create({
           name, description,
           createdBy: userID,
+          sharedWith: R.append(userID, sharedWith),
           mergedProjectIDs: projectIDs,
           uploadedDatasetIDs: datasetIDs
         })

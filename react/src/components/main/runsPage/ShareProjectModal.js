@@ -12,7 +12,10 @@ import {useCrescentContext} from '../../../redux/hooks'
 
 const ShareProjectModal = ({
   project: {
-    name: projectName
+    name: projectName,
+    createdBy: {
+      userID: creatorUserID
+    }
   }
 }) => {
   const {projectID} = useCrescentContext()
@@ -110,6 +113,7 @@ const ShareProjectModal = ({
                 {
                   R.addIndex(R.map)(
                     ({userID, name}, index) => (
+                      (creatorUserID !== userID) &&
                       <Label key={index}
                         basic
                         color='grey'
