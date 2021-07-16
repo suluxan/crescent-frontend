@@ -36,6 +36,49 @@ const UploadNamesSchema = new mongoose.Schema ({
   }
 })
 
+const PlotQuerySchema = new mongoose.Schema ({
+  activeResult: {
+    type: String,
+    default: null
+  },
+  selectedQC: {
+    type: String,
+    default: null
+  },
+  selectedFeature: {
+    type: String,
+    default: null
+  },
+  selectedFeatures: {
+    type: [String],
+    default: null
+  },
+  selectedScaleBy: {
+    type: String,
+    default: null
+  },
+  selectedExpRange: {
+    type: [String],
+    default: null
+  },
+  selectedGroup: {
+    type: String,
+    default: null
+  },
+  selectedAssay: {
+    type: String,
+    default: null
+  },
+  selectedDiffExpression: {
+    type: String,
+    default: null
+  },
+  selectedQCDataset: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null
+  },
+})
+
 const RunSchema = new mongoose.Schema({
   runID: {
     type: mongoose.Schema.Types.ObjectId,
@@ -109,6 +152,11 @@ const RunSchema = new mongoose.Schema({
   uploadNames: {
     type: UploadNamesSchema,
     default: {metadata: null, gsva: null},
+  },
+
+  savedPlotQueries: {
+    type: [PlotQuerySchema],
+    default: []
   }
 })
 

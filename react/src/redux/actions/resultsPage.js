@@ -137,6 +137,18 @@ const toggleSidebarCollapsed = () => ({
 
 const resetResultsPage = R.always({type: 'resultsPage/reset'})
 
+const addSavedPlots = ({value}) =>({
+  type: 'resultsPage/addSavedPlots',
+  payload: {
+    value
+  }
+})
+
+const setPlotQueryID = ({value}) => ({
+  type: 'resultsPage/setPlotQueryID',
+  payload: {value}
+})
+
 export {
   setActiveSidebarTab,
   setActiveDataAction,
@@ -157,5 +169,7 @@ export {
   resetResultsPage,
   addPlot,
   setActivePlot,
-  toggleSidebarCollapsed
+  toggleSidebarCollapsed,
+  addSavedPlots,
+  setPlotQueryID
 }

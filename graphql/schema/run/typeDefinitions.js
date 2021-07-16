@@ -17,6 +17,34 @@ const typeDefs = gql`
     metadata: String
   }
 
+  type PlotQuery {
+    id: ID
+    activeResult: String
+    selectedQC: String
+    selectedFeature: String
+    selectedFeatures: [String]
+    selectedScaleBy: String
+    selectedExpRange: [String]
+    selectedGroup: String
+    selectedAssay: String
+    selectedDiffExpression: String
+    selectedQCDataset: ID
+  }
+
+  input PlotQueryInput {
+    plotQueryID: ID
+    activeResult: String
+    selectedQC: String
+    selectedFeature: String
+    selectedFeatures: [String]
+    selectedScaleBy: String
+    selectedExpRange: [String]
+    selectedGroup: String
+    selectedAssay: String
+    selectedDiffExpression: String
+    selectedQCDataset: ID
+  }
+
   type Run {
     runID: ID
     createdOn: Date
@@ -43,6 +71,8 @@ const typeDefs = gql`
     datasets: [Dataset]
     # Datasets selected within a run to act as reference/anchors for CWL
     referenceDatasets: [Dataset] 
+
+    savedPlotQueries: [PlotQuery]
   }
   type Query {
     allRuns: [Run]
@@ -113,6 +143,19 @@ const typeDefs = gql`
     updateRunName(
       runID: ID!
       newName: String!
+    savePlotQuery(
+      runID: ID!,
+      input: PlotQueryInput!
+    ): Run
+
+    updateSavedPlotQuery(
+      runID: ID!,
+      input: PlotQueryInput!
+    ): Run
+
+    removeSavedPlotQuery(
+      runID: ID!,
+      plotQueryID: ID!
     ): Run
     
   }

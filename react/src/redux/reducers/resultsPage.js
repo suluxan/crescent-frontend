@@ -20,6 +20,7 @@ const initialPlotQuery = {
   selectedDiffExpression: 'All',
   selectedQCDataset: null,
   service: null,
+  plotQueryID: null,
 }
 
 const initialState = {
@@ -237,5 +238,27 @@ export default createReducer(
 
 
     'resultsPage/reset': R.always(initialState),
+
+    'resultsPage/addSavedPlots': (state, payload) => {
+      const {value} = payload
+      // function for converting selectedExpRange to float and remove __typename
+      const cleanUpPlotQuery = R.compose(
+        R.map(R.omit(['__typename'])),
+        R.map(R.evolve({selectedExpRange: R.map(str => parseFloat(str))}))
+      )
+      return R.evolve({
+        plotQueries: R.isEmpty(value) 
+          ? [R.always(initialPlotQuery)] 
+          : R.always(cleanUpPlotQuery(value))
+      })(state)
+    },
+
+    'resultsPage/setPlotQueryID': (state, payload) => {
+      const {value} = payload
+      const {activePlot} = state
+      return R.evolve({
+        plotQueries: evolveAtIndex({plotQueryID: R.always(value)}, activePlot)
+      })(state)
+    },
   }
 )

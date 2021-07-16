@@ -8,7 +8,7 @@ import SidebarComponent from './sidebar'
 import ParametersComponent from './parameters'
 import VisualizationsComponent from './visualizations'
 
-import {resetResultsPage, setActiveSidebarTab} from '../../../redux/actions/resultsPage'
+import {resetResultsPage, setActiveSidebarTab, addSavedPlots} from '../../../redux/actions/resultsPage'
 import {useCrescentContext} from '../../../redux/hooks'
 import {useDispatch} from 'react-redux'
 import {useRunDetailsQuery} from '../../../apollo/hooks/run'
@@ -30,12 +30,14 @@ const ResultsPageComponent = ({
       const runIsIncomplete = R.includes(status, ['pending'])
       const sidebarTab = runIsIncomplete ? 'parameters' : 'visualizations' //'parameters' replaced by 'data', is disabled unless run.referenceDatasets is nonempty
       dispatch(setActiveSidebarTab({sidebarTab}))
+      // add the saved plot queries
+      dispatch(addSavedPlots({value: R.map(plotQuery => RA.renameKeys({ id: 'plotQueryID'})(plotQuery), run.savedPlotQueries)}))
     }
   }, [run])
   if (R.isNil(run)) {
     return null
   }
-
+  
   return (
     <Fade duration={2000}>
     <Segment basic style={{minHeight: 'calc(100vh - 10rem)'}} as={Grid} stretched columns={1}>

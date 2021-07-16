@@ -240,7 +240,48 @@ const resolvers = {
       run.name = newName
       await run.save()
       return run
-    }
+    },
+    
+    savePlotQuery: async (parent, {runID, input}, {Runs}) => {
+      try {
+        const run = await Runs.findOne({runID})
+        run.savedPlotQueries = [...run.savedPlotQueries, R.omit(['plotQueryID'], input)]
+        await run.save()
+        return run
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+    updateSavedPlotQuery: async (parent, {runID, input}, {Runs}) => {
+      try {
+        const run = await Runs.findOne({runID})
+        const plotQueryIndex = R.findIndex(R.propEq('id', input.plotQueryID))(run.savedPlotQueries);
+        const fieldsToChange = R.compose(
+          R.reduce((obj, field) => {
+            obj[`savedPlotQueries.${plotQueryIndex}.${field}`] = input[field]
+            return obj
+          }, {}),
+          R.keys(R.__),
+          R.omit(['plotQueryID'])
+        )(input)
+        await Runs.updateOne({runID}, {$set: fieldsToChange})
+        return run
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+    removeSavedPlotQuery: async (parent, {runID, plotQueryID}, {Runs}) => {
+      try {
+        const run = await Runs.findOne({runID})
+        run.savedPlotQueries = R.filter(query => !R.equals(query.id, plotQueryID), run.savedPlotQueries)
+        await run.save()
+        return run
+      } catch (err) {
+        console.log(err)
+      }
+    },
   },
   Run: {
     createdBy: async({createdBy}, variables, {Users}) => {
